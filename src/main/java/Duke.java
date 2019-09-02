@@ -122,7 +122,7 @@ public class Duke {
 
         while (!input.equals("bye")) {
             if (!inputArr[0].equals("todo") && !inputArr[0].equals("deadline") && !inputArr[0].equals("event")
-                    && !inputArr[0].equals("done") && !inputArr[0].equals("list") && !inputArr[0].equals("delete")) {
+                    && !inputArr[0].equals("done") && !inputArr[0].equals("list") && !inputArr[0].equals("find") && !inputArr[0].equals("delete")){
                 System.out.println("☹ OOPS!!! I'm sorry but I don't know what that means.");
                 input = scanner.nextLine();
                 inputArr = input.split(" ", 2);
@@ -195,6 +195,17 @@ public class Duke {
                 int i=0;
                 for (Task t : arr) {
                     System.out.println(++i + ". " + t.toString());
+                }
+                input = scanner.nextLine();
+                inputArr = input.split(". ", 2);
+            }
+            if (inputArr[0].equals("find")) {
+                int i=0;
+                for (Task t : arr) {
+                    ++i;
+                    if(t.description.contains(inputArr[1])){
+                        System.out.println(i + ". " + t.toString());
+                    }
                 }
                 input = scanner.nextLine();
                 inputArr = input.split(" ", 2);
