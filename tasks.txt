@@ -1,4 +1,2 @@
-[E]@#@party @#@true@#@ home
 [T]@#@homework @#@true
-[D]@#@hw @#@false@#@Tue Dec 31 23:11:12 SGT 2019@#@31-dec-2019 23:11:12
-[D]@#@new hw @#@false@#@Tue Sep 03 23:59:00 SGT 2019@#@ 3-Sep-2019 23:59:00
+[T]@#@eat@#@true
