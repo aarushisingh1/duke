@@ -49,5 +49,30 @@ public class Storage {
         }
         return l;
     }
+    public static void saveTasks(ArrayList<TaskList.Task> arr) {
+        if (arr.size() > 0) {
+            // open file
+            try {
+                FileWriter fw = new FileWriter("tasks.txt");
+                for (TaskList.Task t : arr) {
+                    switch (t.taskType) {
+                        case "[T]":
+                            fw.write(t.taskType + sep + t.description + sep + t.isDone + System.lineSeparator());
+                            break;
+                        case "[D]":
+                            fw.write(t.taskType + sep + t.description + sep + t.isDone + sep + ((TaskList.Deadline) t).by + sep + ((TaskList.Deadline) t).strDate + System.lineSeparator());
+                            break;
+                        case "[E]":
+                            fw.write(t.taskType + sep + t.description + sep + t.isDone + sep + ((TaskList.Event) t).at + System.lineSeparator());
+                            break;
+                    }
+                }
+                fw.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

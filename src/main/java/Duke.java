@@ -8,105 +8,9 @@ import java.util.Date;
 import java.text.ParseException;
 
 public class Duke {
-    static String sep = "@#@";
-
-    public static class Task {
-        protected String taskType;
-        protected String description;
-        protected boolean isDone;
-
-        public Task() {
-
-        }
-
-        public Task(String description) {
-            this.description = description;
-            this.isDone = false;
-        }
-
-        public Task(String description, boolean isDone) {
-            this.description = description;
-            this.isDone = isDone;
-        }
-
-        public String getStatusIcon() {
-            return (isDone ? "[✓]" : "[X]"); // return tick or X symbols
-        }
-
-        public String toString() {
-            return taskType + " " + getStatusIcon() + " " + description;
-        }
-    }
-
-    public static class ToDo extends Task {
-
-        public ToDo(String description) {
-            super(description);
-            this.taskType = "[T]";
-        }
-
-        public ToDo(String description, boolean isDone) {
-            super(description, isDone);
-            this.taskType = "[T]";
-        }
-
-        @Override
-        public String toString() {
-            return super.toString();
-        }
-    }
-
-    public static class Deadline extends Task {
-
-        protected Date by;
-        protected String strDate;
-
-        public Deadline(String description, Date by, String strDate) {
-            super(description);
-            this.by = by;
-            this.taskType = "[D]";
-            this.strDate = strDate;
-        }
-
-        public Deadline(String description, Date by, boolean isDone, String strDate) {
-            super(description, isDone);
-            this.by = by;
-            this.taskType = "[D]";
-            this.strDate = strDate;
-        }
-
-
-        @Override
-        public String toString() {
-            return super.toString() + " (by: " + by + ")";
-        }
-    }
-
-    public static class Event extends Task {
-
-        protected String at;
-
-        public Event(String description, String at) {
-            super(description);
-            this.at = at;
-            this.taskType = "[E]";
-        }
-
-        public Event(String description, String at, boolean isDone) {
-            super(description, isDone);
-            this.at = at;
-            this.taskType = "[E]";
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " (at: " + at + ")";
-        }
-    }
-
     public static void main(String[] args) throws Exception {
-        ArrayList<Task> arr;
-        arr = loadTasks();
+        ArrayList<TaskList.Task> arr;
+        arr = Storage.loadTasks();
 
         String input;
         String inputArr[];
@@ -133,7 +37,7 @@ public class Duke {
                     input = scanner.nextLine();
                     inputArr = input.split(" ", 2);
                 } else {
-                    ToDo td = new ToDo(inputArr[1]);
+                    TaskList.ToDo td = new TaskList.ToDo(inputArr[1]);
                     td.isDone = false;
                     arr.add(td);
                     System.out.println(
@@ -151,7 +55,7 @@ public class Duke {
                 } else {
                     tempArr = inputArr[1].split("/by", 2);
                     dateToEnter = formatter1.parse(tempArr[1]);
-                    Deadline dl = new Deadline(tempArr[0], dateToEnter, tempArr[1]);
+                    TaskList.Deadline dl = new TaskList.Deadline(tempArr[0], dateToEnter, tempArr[1]);
                     System.out.println("Got it! I've added this task: \n" + "[D]" + dl.getStatusIcon() + " "
                             + tempArr[0] + "(by: " + tempArr[1] + ")");
                     arr.add(dl);
@@ -167,7 +71,7 @@ public class Duke {
                     inputArr = input.split(" ", 2);
                 } else {
                     tempArr = inputArr[1].split("/at", 2);
-                    Event ev = new Event(tempArr[0], tempArr[1]);
+                    TaskList.Event ev = new TaskList.Event(tempArr[0], tempArr[1]);
                     System.out.println("Got it! I've added this task: \n" + "[E]" + ev.getStatusIcon() + " "
                             + tempArr[0] + "(at: " + tempArr[1] + ")");
                     arr.add(ev);
@@ -192,7 +96,7 @@ public class Duke {
             if (inputArr[0].equals("list")) {
                 System.out.println("Here are the tasks in your list:\n");
                 int i=0;
-                for (Task t : arr) {
+                for (TaskList.Task t : arr) {
                     System.out.println(++i + ". " + t.toString());
                 }
                 input = scanner.nextLine();
@@ -200,7 +104,7 @@ public class Duke {
             }
             if (inputArr[0].equals("find")) {
                 int i=0;
-                for (Task t : arr) {
+                for (TaskList.Task t : arr) {
                     ++i;
                     if(t.description.contains(inputArr[1])){
                         System.out.println(i + ". " + t.toString());
@@ -226,74 +130,9 @@ public class Duke {
         }
 
         scanner.close();
-        saveTasks(arr);
+        Storage.saveTasks(arr);
         System.out.println("Bye! See you again soon!");
 
     }
 
-    public static void saveTasks(ArrayList<Task> arr) {
-        if (arr.size() > 0) {
-            // open file
-            try {
-                FileWriter fw = new FileWriter("tasks.txt");
-                for (Task t : arr) {
-                    switch (t.taskType) {
-                        case "[T]":
-                            fw.write(t.taskType + sep + t.description + sep + t.isDone + System.lineSeparator());
-                            break;
-                        case "[D]":
-                            fw.write(t.taskType + sep + t.description + sep + t.isDone + sep + ((Deadline) t).by +sep + ((Deadline) t).strDate + System.lineSeparator());
-                            break;
-                        case "[E]":
-                            fw.write(t.taskType + sep + t.description + sep + t.isDone + sep + ((Event) t).at + System.lineSeparator());
-                            break;
-                    }
-                }
-                fw.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static ArrayList<Task> loadTasks() {
-        String s;
-        String tempArr[];
-        Date dll;
-        SimpleDateFormat formatter6=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-        ArrayList<Task> l = new ArrayList<Task>();
-        try {
-            File f = new File("tasks.txt");
-            if (!f.exists()) {
-                return l;
-            }
-            Scanner scanner = new Scanner(f);
-            while (scanner.hasNextLine()) {
-                s = scanner.nextLine();
-                tempArr = s.split(sep);
-                switch (tempArr[0]) {
-                    case "[T]":
-                        ToDo td = new ToDo(tempArr[1], Boolean.parseBoolean(tempArr[2]));
-                        l.add(td);
-                        break;
-                    case "[D]":
-                        dll = formatter6.parse(tempArr[4]);
-                        Deadline dl = new Deadline(tempArr[1], dll, Boolean.parseBoolean(tempArr[2]), tempArr[4]);
-                        l.add(dl);
-                        break;
-                    case "[E]":
-                        Event ev = new Event(tempArr[1], tempArr[3], Boolean.parseBoolean(tempArr[2]));
-                        l.add(ev);
-                        break;
-                    default:
-                        ;
-                }
-            }
-            scanner.close();
-        } catch (FileNotFoundException | ParseException e) {
-            e.printStackTrace();
-        }
-        return l;
-    }
 }
