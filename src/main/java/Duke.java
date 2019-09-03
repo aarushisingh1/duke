@@ -121,8 +121,7 @@ public class Duke {
         int num = 0;
 
         while (!input.equals("bye")) {
-            if (!inputArr[0].equals("todo") && !inputArr[0].equals("deadline") && !inputArr[0].equals("event")
-                    && !inputArr[0].equals("done") && !inputArr[0].equals("list") && !inputArr[0].equals("find") && !inputArr[0].equals("delete")){
+            if (!inputArr[0].equals("todo") && !inputArr[0].equals("deadline") && !inputArr[0].equals("event") && !inputArr[0].equals("done") && !inputArr[0].equals("list") && !inputArr[0].equals("find") && !inputArr[0].equals("delete")){
                 System.out.println("☹ OOPS!!! I'm sorry but I don't know what that means.");
                 input = scanner.nextLine();
                 inputArr = input.split(" ", 2);
