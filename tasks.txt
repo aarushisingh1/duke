@@ -3,3 +3,5 @@
 [T]@#@sleep@#@true
 [D]@#@hw @#@true@#@Tue Sep 03 23:59:00 SGT 2019@#@ 03-sep-2019 23:59:00
 [T]@#@jump@#@true
+[T]@#@work@#@true
+[T]@#@more work@#@false

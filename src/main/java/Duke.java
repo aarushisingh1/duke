@@ -100,7 +100,7 @@ public class Duke {
                     System.out.println(++i + ". " + t.toString());
                 }
                 input = scanner.nextLine();
-                inputArr = input.split(". ", 2);
+                inputArr = input.split(" ", 2);
             }
             if (inputArr[0].equals("find")) {
                 int i=0;
