@@ -7,6 +7,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.text.ParseException;
 
+
+//handles the various commands and data types
 public class TaskList {
 
     public static class Task {

@@ -7,7 +7,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.text.ParseException;
 
-
+//handles the saving and loading of data
 public class Storage {
     static String sep = "@#@";
     public static ArrayList<TaskList.Task> loadTasks() {

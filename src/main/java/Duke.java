@@ -7,6 +7,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.text.ParseException;
 
+
+//runs the main task of Duke & takes in user input
 public class Duke {
     public static void main(String[] args) throws Exception {
         ArrayList<TaskList.Task> arr;
